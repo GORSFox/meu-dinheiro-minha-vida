@@ -4,101 +4,169 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meu Dinheiro, Minha Vida — Diagnóstico Financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 <style>
+/* ===== Paleta ===== */
 :root{
-  --bg:#f4f7f6; --card:#ffffff; --ink:#20302f; --muted:#687876;
-  --primary:#177f7c; --primary2:#0f6663; --gold:#c89b3c;
-  --line:#dfe8e6; --soft:#e9f4f2; --danger:#b75b5b; --good:#4d8765;
-  --shadow:0 10px 30px rgba(22,55,52,.08); --radius:18px;
+  --gold:#ffb81d; --charcoal:#404348; --tan:#c89c76; --mist:#efecec;
+  --pale:#d9d4d1; --tan-lt:#e2c3a4;
+  --bg:#efecec; --card:#fbfaf9; --ink:#2a2d31; --deep:#404348; --muted:#62666b;
+  --primary:#404348; --primary2:#585c62;
+  --line:#dcd7d4; --soft:#e7e3e0; --tint:#f5f3f2; --sand:#cdc6c1;
+  --danger:#a8402c; --good:#4b7a3d;
+  --shadow:0 1px 0 rgba(64,67,72,.06),0 16px 34px -20px rgba(64,67,72,.4); --radius:20px;
+
+  /* ===== Sistema tipográfico (um padrão para tudo) =====
+     Títulos, frases e números de destaque: Fraunces (serifada, calorosa)
+     Todo o resto (texto, campos, botões, tabelas): Figtree (sem serifa, muito legível) */
+  --serif:Fraunces,"Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:Figtree,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --fs-xs:.8125rem;   /* 13px  apoio, rodapé, status */
+  --fs-sm:.9375rem;   /* 15px  rótulos, tabela, texto auxiliar, botões */
+  --fs-base:1.0625rem;/* 17px  texto corrido e campos */
+  --fs-lg:1.25rem;    /* 20px  perguntas */
+  --fs-h2:clamp(1.65rem,3.2vw,2.15rem);
+  --fs-h1:clamp(2.5rem,6.4vw,4.4rem);
+  --fs-quote:clamp(1.3rem,2.7vw,1.7rem);
+  --fs-num:clamp(1.45rem,2.6vw,1.8rem);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.5}
-header{background:linear-gradient(135deg,#0e6461,#1c8d88);color:white;padding:42px 20px 36px}
-.wrap{max-width:1120px;margin:auto}
-.brand{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
-h1{font-size:clamp(30px,5vw,48px);line-height:1.05;margin:10px 0}
-.subtitle{max-width:760px;font-size:17px;opacity:.92}
-nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.navin{display:flex;gap:8px;overflow:auto;padding:10px 4px}
-.navin button{white-space:nowrap;border:0;background:transparent;color:var(--muted);padding:10px 13px;border-radius:10px;cursor:pointer;font-weight:600}
-.navin button.active,.navin button:hover{background:var(--soft);color:var(--primary2)}
-main{padding:28px 16px 70px}
-section{scroll-margin-top:75px;margin:0 0 28px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
-.hero-note{border-left:4px solid var(--gold);background:#fffaf0}
-h2{margin:0 0 7px;font-size:25px}
-h3{margin:18px 0 10px}
-p{margin:7px 0}
-.small{font-size:13px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.field{display:flex;flex-direction:column;gap:6px}
-label{font-size:13px;font-weight:700;color:#40514f}
-input,select,textarea{width:100%;border:1px solid #ccd9d6;border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);font:inherit}
-textarea{min-height:90px;resize:vertical}
-input:focus,select:focus,textarea:focus{outline:3px solid #d6eeeb;border-color:var(--primary)}
-.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-button.primary,.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:700;cursor:pointer}
-.primary{background:var(--primary);color:#fff}.primary:hover{background:var(--primary2)}
-.secondary{background:#edf3f2;color:var(--primary2)}
-.danger{background:#faeeee;color:var(--danger)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
-.stat{padding:17px;border:1px solid var(--line);border-radius:14px;background:#fbfcfc}
-.stat .v{font-size:24px;font-weight:800;margin-top:3px}
-.good{color:var(--good)}.bad{color:var(--danger)}
-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
-th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:var(--fs-base);line-height:1.65;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-optical-sizing:auto}
+h1,h2,h3,.question strong,.quote,.stat .v{font-family:var(--serif);font-optical-sizing:auto}
+h1,h2,.question strong,.quote{text-wrap:balance}
+.header-guide{max-width:900px;margin-top:30px;padding-top:24px;border-top:1px solid rgba(64,67,72,.16)}
+.header-guide h2{margin:0 0 10px;font-size:clamp(1.55rem,3vw,2.15rem);font-weight:600;line-height:1.15;color:var(--deep)}
+.header-guide p{max-width:78ch;color:var(--muted);margin:.5em 0}
+.header-guide .quote{max-width:900px;margin:18px 0 8px;padding:0;border:0;font-size:var(--fs-quote);color:var(--charcoal)}
+.header-guide .small{color:var(--muted);font-size:var(--fs-sm)}
+p{margin:.55em 0;text-wrap:pretty}
+.card p,.card .question>p{max-width:68ch}
+b,strong{font-weight:700}
+
+header{position:relative;overflow:hidden;background:var(--bg);color:var(--deep);padding:60px 20px 64px}
+.wrap{max-width:1120px;margin:auto;position:relative}
+.dots{position:absolute;right:0;top:-24px;width:360px;height:250px;pointer-events:none}
+.dots i{position:absolute;border-radius:50%;display:block}
+.dots i:nth-child(1){width:150px;height:150px;background:var(--gold);right:170px;top:10px}
+.dots i:nth-child(2){width:120px;height:120px;background:var(--tan);right:60px;top:70px}
+.dots i:nth-child(3){width:84px;height:84px;background:var(--charcoal);right:200px;top:150px}
+.dots i:nth-child(4){width:200px;height:200px;background:var(--pale);right:20px;top:-60px;z-index:-1}
+.brand{font-family:var(--sans);font-size:var(--fs-sm);font-weight:700;letter-spacing:.01em;color:var(--primary2)}
+h1{font-size:var(--fs-h1);font-weight:600;line-height:1.04;letter-spacing:-.025em;margin:.28em 0 .4em;max-width:13ch;color:var(--deep)}
+.subtitle{max-width:34em;font-size:1.25rem;line-height:1.55;color:var(--muted);text-wrap:pretty}
+
+nav{position:sticky;top:0;z-index:5;background:var(--deep);border-bottom:3px solid var(--gold)}
+.navin{display:flex;gap:4px;overflow:auto;padding:9px 4px;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+.navin button{white-space:nowrap;border:0;background:transparent;color:#e2dedc;padding:9px 15px;border-radius:999px;cursor:pointer;font:600 var(--fs-sm)/1.2 var(--sans);letter-spacing:.005em;transition:background .2s,color .2s}
+.navin button:hover{background:rgba(200,156,118,.3);color:#fff}
+.navin button.active{background:var(--gold);color:#2a2d31}
+
+main{padding:34px 16px 80px}
+section{scroll-margin-top:75px;margin:0 0 26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px}
+.hero-note{background:var(--deep);border:0;color:#e6e2e0;position:relative;overflow:hidden}
+.hero-note::after{content:"";position:absolute;right:-40px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:var(--gold)}
+.hero-note::before{content:"";position:absolute;right:90px;bottom:-30px;width:90px;height:90px;border-radius:50%;background:var(--tan)}
+.hero-note>*{position:relative;z-index:1;max-width:760px}
+.hero-note h2,.hero-note .quote{color:#fff}
+.hero-note b{color:var(--gold)}
+.hero-note .quote{border-top:1px solid rgba(255,255,255,.25);margin-top:14px}
+
+h2{margin:0 0 .35em;font-size:var(--fs-h2);font-weight:600;line-height:1.14;letter-spacing:-.018em;color:var(--deep)}
+h3{margin:18px 0 10px;font-size:var(--fs-lg);font-weight:600}
+.small{font-family:var(--sans);font-size:var(--fs-sm);line-height:1.55;color:var(--muted)}
+.hero-note .small{color:#bfbab7}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}
+label{font-size:var(--fs-sm);font-weight:700;line-height:1.35;color:var(--deep)}
+input,select,textarea{width:100%;border:1px solid var(--sand);border-radius:12px;padding:12px 13px;background:#fff;color:var(--ink);font:400 var(--fs-base)/1.5 var(--sans);transition:border-color .2s,box-shadow .2s}
+input::placeholder,textarea::placeholder{color:#9a9693;font-weight:400}
+textarea{min-height:100px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--tan);box-shadow:0 0 0 4px rgba(255,184,29,.45)}
+button:focus-visible{outline:3px solid var(--deep);outline-offset:2px}.navin button:focus-visible{outline-color:var(--gold)}
+
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button.primary,.btn{border:0;border-radius:12px;padding:13px 20px;font:700 var(--fs-sm)/1.2 var(--sans);letter-spacing:.005em;cursor:pointer;transition:background .2s,color .2s}
+.primary{background:var(--deep);color:#fff}.primary:hover{background:var(--gold);color:#2a2d31}
+.secondary{background:var(--soft);color:var(--deep)}.secondary:hover{background:var(--sand)}
+.danger{background:#f4e0d9;color:var(--danger)}.danger:hover{background:#efd0c5}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.stat{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.stat:nth-child(1){border-top:4px solid var(--pale)}
+.stat:nth-child(2){border-top:4px solid var(--tan)}
+.stat:nth-child(3){border-top:4px solid var(--tan-lt)}
+.stat:nth-child(4){border-top:4px solid var(--gold)}
+.stat .small{font-weight:600}
+.stat .v{font-size:var(--fs-num);font-weight:600;line-height:1.2;margin-top:4px;letter-spacing:-.01em;color:var(--deep);font-variant-numeric:lining-nums tabular-nums}
+.good{color:var(--good)!important}.bad{color:var(--danger)!important}
+
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:var(--fs-sm);line-height:1.5}
+th,td{text-align:left;padding:13px 11px;border-bottom:1px solid var(--line);vertical-align:top;font-variant-numeric:lining-nums tabular-nums}
+th{color:var(--muted);font-size:var(--fs-xs);font-weight:700;letter-spacing:.02em}
 .row-actions{display:flex;gap:6px}
-.icon{border:0;background:#f0f4f3;border-radius:8px;padding:7px;cursor:pointer}
-.pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:var(--soft);color:var(--primary2);font-size:12px;font-weight:700}
-.range{display:flex;align-items:center;gap:12px}.range input{padding:0}
-.question{padding:16px;background:#fafcfc;border:1px solid var(--line);border-radius:14px;margin-top:12px}
-.question strong{display:block;margin-bottom:7px}
-.result{background:linear-gradient(135deg,#eff8f6,#fff);border:1px solid #cde5e1}
-.quote{font-size:19px;font-weight:700;color:var(--primary2);padding:18px 0}
-.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed #cbd8d5;border-radius:12px}
-.progress{height:8px;background:#e7eeec;border-radius:20px;overflow:hidden;margin-top:12px}.bar{height:100%;background:var(--primary);width:0;transition:.3s}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
-@media(max-width:800px){.grid,.grid2,.stats{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.grid,.grid2,.stats{grid-template-columns:1fr}.card{padding:18px}h1{font-size:34px}table{font-size:13px}}
+.icon{border:0;background:var(--soft);border-radius:9px;padding:8px;cursor:pointer}.icon:hover{background:var(--sand)}
+.pill{display:inline-flex;padding:5px 11px;border-radius:999px;background:var(--deep);color:#fff;font-size:var(--fs-xs);font-weight:700}
+.range{display:flex;align-items:center;gap:12px;font-size:var(--fs-sm)}.range input{padding:0;accent-color:var(--gold)}
+
+.question{padding:20px;background:var(--tint);border:1px solid var(--line);border-left:4px solid var(--tan);border-radius:14px;margin-top:14px}
+.question strong{display:block;margin-bottom:10px;font-size:var(--fs-lg);font-weight:600;line-height:1.3;letter-spacing:-.01em;color:var(--deep)}
+.question.note{background:#fff5da;border-color:#f3dc9f;border-left-color:var(--gold)}
+.question p{font-size:var(--fs-base)}
+.checks{gap:10px!important}
+.check{display:flex;align-items:center;gap:10px;font-size:var(--fs-sm);font-weight:500;line-height:1.4;color:var(--ink);background:#fff;border:1px solid var(--sand);border-radius:12px;padding:11px 13px;cursor:pointer;transition:background .2s,border-color .2s}
+.check:hover{border-color:var(--tan)}
+.check:has(input:checked){background:var(--soft);border-color:var(--deep);font-weight:600}
+.check input{width:18px;height:18px;padding:0;accent-color:var(--deep);flex:none}
+
+.result{background:linear-gradient(160deg,#fbfaf9 0%,#e8e3df 100%);border:1px solid var(--sand)}
+.quote{font-size:var(--fs-quote);font-weight:500;font-style:italic;line-height:1.35;letter-spacing:-.012em;color:var(--charcoal);padding:20px 0 6px}
+.empty{padding:24px;text-align:center;font-size:var(--fs-sm);color:var(--muted);border:1px dashed var(--sand);border-radius:14px}
+.progress{height:10px;background:var(--sand);border-radius:20px;overflow:hidden;margin-top:18px}
+.bar{height:100%;background:linear-gradient(90deg,var(--tan),var(--gold));width:0;transition:width .4s}
+footer{text-align:center;color:var(--muted);font-size:var(--fs-xs);line-height:1.6;padding:24px 20px 36px;max-width:760px;margin:auto}
 
 .voice-wrap{position:relative}
-.voice-wrap textarea{padding-right:108px}
-.voice-btn{position:absolute;right:8px;top:8px;border:0;border-radius:9px;padding:8px 10px;background:#e9f4f2;color:#0f6663;font-weight:800;cursor:pointer;font-size:12px}
-.voice-btn:hover{background:#d9ece9}
-.voice-btn.recording{background:#faeeee;color:#b75b5b}
-.voice-status{font-size:11px;color:#687876;margin-top:5px;min-height:16px}
+.voice-wrap textarea{padding-right:112px}
+.voice-btn{position:absolute;right:8px;top:8px;border:0;border-radius:10px;padding:8px 11px;background:var(--soft);color:var(--deep);font:700 var(--fs-xs)/1.2 var(--sans);cursor:pointer}
+.voice-btn:hover{background:var(--sand)}
+.voice-btn.recording{background:#f4e0d9;color:var(--danger)}
+.voice-status{font-size:var(--fs-xs);color:var(--muted);margin-top:5px;min-height:16px}
+
+@media(max-width:800px){.grid,.grid2,.stats{grid-template-columns:1fr 1fr}.dots{opacity:.3}}
+@media(max-width:560px){.grid,.grid2,.stats,.checks{grid-template-columns:1fr!important}.card{padding:20px}header{padding:40px 20px 44px}table{font-size:var(--fs-xs)}.dots{display:none}.hero-note::before,.hero-note::after{opacity:.35}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{header{padding:10px 0}.dots,nav,.btns,.voice-btn,.hero-note::before,.hero-note::after{display:none}.card{box-shadow:none;break-inside:avoid}.hero-note{background:#fff;color:#000}.hero-note h2,.hero-note .quote,.hero-note b{color:#000}body{background:#fff;font-size:12pt}}
 </style>
 </head>
 <body>
-<header>
-<div class="wrap">
-<div class="brand">Diagnóstico financeiro pessoal</div>
+<header id="inicio">
+<div class="wrap"><div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="brand">Meu espaço financeiro pessoal</div>
 <h1>Meu dinheiro, minha vida.</h1>
 <div class="subtitle">Uma ferramenta para compreender dinheiro, dívidas, escolhas e qualidade de vida — sem culpa e sem julgamentos.</div>
+
+
 </div>
 </header>
 
 <nav><div class="wrap navin">
 <button onclick="go('inicio')">Início</button>
+<button onclick="go('jornada')">Como preencher minha jornada financeira</button>
 <button onclick="go('retrato')">Meu retrato</button>
 <button onclick="go('gastos')">Meus gastos</button>
-<button onclick="go('dividas')">Minhas dívidas</button>
+<button onclick="go('dividas')">Minhas dívidas</button><button onclick="go('compreender')">Antes de cortar</button>
 <button onclick="go('sentido')">O que importa</button>
-<button onclick="go('renda')">Minha expansão</button>
-<button onclick="go('bemestar')">Bem-estar</button><button onclick="go('resultado')">Meu diagnóstico</button>
+<button onclick="go('renda')">Minha expansão</button><button onclick="go('evolucao')">Minha evolução</button>
+<button onclick="go('bemestar')">Bem-estar</button><button onclick="go('resultado')">Meu caminho financeiro</button>
 </div></nav>
 
 <main class="wrap">
-<section id="inicio">
-<div class="card hero-note">
-<h2>Antes de cortar, compreenda.</h2>
-<p>Nem todo gasto é desperdício. Nem toda dívida nasceu de irresponsabilidade. E nem toda economia melhora a vida.</p>
-<p>Este diagnóstico começa pelos números, mas não termina neles. A proposta é descobrir <b>o que seu dinheiro está fazendo pela sua vida</b>, o que está comprometendo seu futuro e onde pode existir espaço para aumentar sua renda.</p>
-<div class="quote">“Não se trata apenas de gastar menos. Trata-se de escolher melhor — e aumentar a capacidade de sustentar o que importa.”</div>
-</div>
-</section>
+
 
 <section id="retrato">
 <div class="card">
@@ -130,7 +198,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 </div>
 <div class="field" style="margin-top:14px"><label>Quanto esse gasto importa para sua qualidade de vida?</label><div class="range"><input id="eScore" type="range" min="0" max="10" value="5" oninput="document.getElementById('scoreVal').textContent=this.value"><b id="scoreVal">5</b>/10</div></div>
 <div class="field" style="margin-top:14px"><label>Se eu tivesse que reduzir esse gasto, o que eu sentiria que estou perdendo?</label><div class="voice-wrap"><textarea id="eLoss" placeholder="Ex.: perderia um momento de cuidado comigo, deixaria de encontrar meus amigos..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div></div>
-<div class="btns"><button class="primary btn" onclick="addExpense()">Adicionar gasto</button></div>
+<div class="btns"><button class="primary btn" id="expenseBtn" onclick="addExpense()">Adicionar gasto</button><button class="secondary btn" id="cancelExpenseBtn" onclick="cancelExpenseEdit()" style="display:none">Cancelar edição</button></div>
 <div id="expenseTable" style="margin-top:18px"></div>
 </div>
 </section>
@@ -149,8 +217,17 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 <div class="field"><label>O que esse gasto trouxe de bom?</label><div class="voice-wrap"><textarea id="dGood" placeholder="Ex.: resolveu uma emergência, trouxe autoestima, permitiu trabalhar..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div></div>
 <div class="field"><label>O que você gostaria que fosse diferente da próxima vez?</label><div class="voice-wrap"><textarea id="dChange" placeholder="Ex.: ter uma reserva, criar renda extra, planejar o gasto..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div></div>
 </div>
-<div class="btns"><button class="primary btn" onclick="addDebt()">Adicionar dívida</button></div>
+<div class="btns"><button class="primary btn" id="debtBtn" onclick="addDebt()">Adicionar dívida</button><button class="secondary btn" id="cancelDebtBtn" onclick="cancelDebtEdit()" style="display:none">Cancelar edição</button></div>
 <div id="debtTable" style="margin-top:18px"></div>
+</div>
+</section>
+
+<section id="compreender">
+<div class="card hero-note">
+<h2>Antes de cortar, compreenda.</h2>
+<p>Nem todo gasto é desperdício. Nem toda dívida nasceu de irresponsabilidade. E nem toda economia melhora a vida.</p>
+<p>Antes de decidir o que reduzir, olhe para <b>o que seu dinheiro está fazendo pela sua vida</b>: o que ele sustenta, o que ele resolve, o que ele proporciona e o que pode estar se repetindo.</p>
+<div class="quote">“Não se trata apenas de gastar menos. Trata-se de escolher melhor — e aumentar a capacidade de sustentar o que importa.”</div>
 </div>
 </section>
 
@@ -206,6 +283,63 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 <h2>6. Meu bem-estar financeiro</h2>
 <p class="small">Dinheiro também produz emoções. Esta etapa não diagnostica saúde mental e não substitui acompanhamento profissional. Ela ajuda a perceber como a situação financeira está afetando suas decisões e sua sensação de segurança.</p>
 
+
+
+<div class="question">
+<strong>Quando penso em guardar dinheiro, o que faz mais sentido para minha realidade hoje?</strong>
+<select id="savingPurpose">
+<option>Ainda não sei</option>
+<option>Ter uma reserva para emergências e imprevistos</option>
+<option>Guardar para um objetivo específico</option>
+<option>Construir segurança aos poucos</option>
+<option>Guardar para poder realizar algo importante para mim</option>
+<option>Primeiro preciso organizar outras prioridades</option>
+</select>
+<p class="small" style="margin-top:8px">Guardar dinheiro pode ter mais de uma finalidade. Uma referência de percentual pode ajudar algumas pessoas, mas não precisa ser uma regra rígida: o valor possível depende da realidade, das prioridades e das necessidades de cada pessoa.</p>
+</div>
+
+<div class="question">
+<strong>Se uma emergência acontecesse hoje, o que eu gostaria que minha reserva pudesse proteger?</strong>
+<div class="voice-wrap"><textarea id="reserveProtection" placeholder="Ex.: minha casa, minha saúde, minha renda, uma despesa familiar, um período sem trabalho..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question">
+<strong>Quando surge uma emergência financeira, como normalmente eu consigo lidar?</strong>
+<select id="emergencyResponse">
+<option>Ainda não sei</option>
+<option>Tenho uma reserva para situações inesperadas</option>
+<option>Consigo ajustar outros gastos sem recorrer a crédito</option>
+<option>Preciso recorrer ao cartão ou empréstimo</option>
+<option>Conto com ajuda de familiares ou outras pessoas</option>
+<option>Cada emergência me desorganiza financeiramente</option>
+</select>
+</div>
+
+<div class="question">
+<strong>Que tipo de emergência eu gostaria de estar mais preparada para enfrentar?</strong>
+<div class="voice-wrap"><textarea id="emergencyPlan" placeholder="Ex.: saúde, conserto da casa, carro, perda de renda, ajuda à família..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+
+<div class="question">
+<strong>Quando meu dinheiro aperta, o que muda em mim?</strong>
+<div class="checks" style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:9px">
+<label class="check"><input type="checkbox" name="moneyImpact" value="sono"> Meu sono ou descanso</label>
+<label class="check"><input type="checkbox" name="moneyImpact" value="humor"> Meu humor</label>
+<label class="check"><input type="checkbox" name="moneyImpact" value="decisoes"> Minha capacidade de decidir</label>
+<label class="check"><input type="checkbox" name="moneyImpact" value="relacoes"> Minha convivência com outras pessoas</label>
+<label class="check"><input type="checkbox" name="moneyImpact" value="seguranca"> Minha sensação de segurança</label>
+<label class="check"><input type="checkbox" name="moneyImpact" value="rotina"> Minha rotina</label>
+<label class="check"><input type="checkbox" name="moneyImpact" value="nada"> Não percebo mudanças importantes</label>
+<label class="check"><input type="checkbox" name="moneyImpact" value="outro"> Outra coisa</label>
+</div>
+</div>
+
+<div class="question">
+<strong>E quando estou emocionalmente abalada, o que pode acontecer com minhas decisões financeiras?</strong>
+<div class="voice-wrap"><textarea id="emotionDecision" placeholder="Ex.: compro, evito olhar a conta, uso crédito, fico mais cuidadosa, peço ajuda, adio decisões..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
 <div class="question">
 <strong>Quando penso na minha situação financeira hoje, o que mais aparece?</strong>
 <div class="checks" style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:9px">
@@ -254,21 +388,72 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 </div>
 
 <div class="question">
-<strong>Que decisão financeira quero tomar com mais calma?</strong>
+<strong>Que decisão financeira quero tomar com mais calma neste ano?</strong>
 <div class="voice-wrap"><textarea id="calmDecision" placeholder="Uma dívida, uma compra, um empréstimo, um corte de gasto, uma fonte de renda..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
 </div>
 
-<div class="question" style="background:#eef8f6">
+
+<div class="question note">
+<strong>Meu próximo passo</strong>
+<p id="wellbeingGuidance">À medida que você responde, esta área vai transformar suas respostas em pontos de atenção e próximos passos práticos.</p>
+</div>
+
+<div class="question">
+<strong>O que eu quero acompanhar nos próximos meses?</strong>
+<div class="checks" style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:9px">
+<label class="check"><input type="checkbox" name="follow" value="gastos"> Meus gastos e o significado deles</label>
+<label class="check"><input type="checkbox" name="follow" value="dividas"> A redução das minhas dívidas</label>
+<label class="check"><input type="checkbox" name="follow" value="emergencia"> Minha preparação para emergências</label>
+<label class="check"><input type="checkbox" name="follow" value="renda"> Minha expansão de renda</label>
+<label class="check"><input type="checkbox" name="follow" value="reserva"> Minha reserva financeira</label>
+<label class="check"><input type="checkbox" name="follow" value="consciencia"> Minha consciência antes de gastar ou contratar crédito</label>
+</div>
+</div>
+
+<div class="question note">
 <strong>Uma lembrança importante</strong>
 <p>O objetivo não é eliminar todas as emoções envolvidas com dinheiro. É criar espaço entre a emoção e a decisão. <b>Conhecer o que sentimos aumenta nossa capacidade de escolher.</b></p>
 </div>
 </div>
 </section>
 
+
+<section id="evolucao">
+<div class="card">
+<h2>7. Minha evolução</h2>
+<p class="small">Você pode voltar aqui depois de um tempo. A ideia não é comparar você com outra pessoa, mas perceber o que mudou em você.</p>
+
+<div class="question">
+<strong>Desde a última vez, o que mudou na minha vida financeira?</strong>
+<div class="voice-wrap"><textarea id="evolutionChange" placeholder="Ex.: minha renda aumentou, uma despesa surgiu, consegui quitar uma dívida, passei por uma emergência, comecei a guardar..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question">
+<strong>O que eu aprendi sobre mim e sobre meu dinheiro?</strong>
+<div class="voice-wrap"><textarea id="evolutionLearning" placeholder="Uma percepção que você não tinha antes."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question">
+<strong>O que consegui fazer diferente?</strong>
+<div class="voice-wrap"><textarea id="evolutionAction" placeholder="Ex.: planejei uma compra, criei uma renda extra, pedi ajuda, parei de evitar a conta, comecei uma reserva..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question">
+<strong>O que quero experimentar na próxima etapa?</strong>
+<div class="voice-wrap"><textarea id="evolutionNext" placeholder="Uma mudança possível, pequena ou grande."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question note">
+<strong>Minha frase de evolução</strong>
+<p id="evolutionReading">Quando você voltar, este espaço poderá registrar o que mudou — não apenas nos números, mas na sua relação com eles.</p>
+</div>
+</div>
+</section>
+
 <section id="resultado">
 <div class="card result">
-<h2>7. Meu diagnóstico</h2>
-<p>Esta tela reúne os números e as reflexões. Ela não dá uma nota para sua vida financeira. Ela ajuda a enxergar relações.</p>
+<h2>8. Meu caminho financeiro</h2>
+<p>Esta tela reúne números, significados, emoções e possibilidades. Não é uma nota e não pretende diagnosticar você. É um retrato que pode ser atualizado sempre que sua vida mudar.</p>
 <div class="stats">
 <div class="stat"><div class="small">Renda mensal</div><div class="v" id="rIncome">R$ 0,00</div></div>
 <div class="stat"><div class="small">Gastos registrados</div><div class="v" id="rExpenses">R$ 0,00</div></div>
@@ -280,16 +465,24 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 <p id="reading">Cadastre seus dados para gerar uma leitura.</p>
 </div>
 <div class="question">
-<strong>Leitura de significado</strong>
-<p id="meaningReading">Registre seus gastos e reflexões para enxergar o que o dinheiro está sustentando.</p>
+<strong>Relação entre dinheiro e qualidade de vida</strong>
+<p id="meaningReading">Registre seus gastos e atribua importância a eles para visualizar essa relação.</p>
 </div>
 <div class="question">
-<strong>Leitura das dívidas</strong>
-<p id="debtReading">Cadastre as dívidas para entender se existe algum padrão que pode voltar a aparecer.</p>
+<strong>O que pode se repetir</strong>
+<p id="debtReading">Cadastre as dívidas para visualizar quanto delas está associado a situações que podem voltar a acontecer.</p>
 </div>
 <div class="question">
-<strong>Próximo movimento</strong>
-<p id="nextReading">O próximo passo não precisa ser um corte. Pode ser uma decisão, um planejamento ou uma nova fonte de renda.</p>
+<strong>Próximos passos</strong>
+<p id="nextReading">Seu caminho será formado a partir do que você respondeu.</p>
+</div>
+<div class="question">
+<strong>Minha evolução</strong>
+<p id="evolutionResult">Volte a esta ferramenta depois de um tempo para registrar o que mudou.</p>
+</div>
+<div class="question">
+<strong>Índices de consciência</strong>
+<p id="awarenessReading">Responda às etapas da jornada para gerar os indicadores.</p>
 </div>
 <div class="btns">
 <button class="primary btn" onclick="saveData()">Salvar neste dispositivo</button>
@@ -302,43 +495,120 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 </section>
 </main>
 
-<footer>Meu dinheiro, minha vida. • Diagnóstico pessoal • Os dados ficam no seu dispositivo quando você usa “Salvar”.</footer>
+<footer>Meu dinheiro, minha vida. • Jornada financeira pessoal • Os dados ficam no seu dispositivo quando você usa “Salvar”. Você pode voltar e atualizar seu espaço sempre que sua realidade mudar.</footer>
 
 <script>
 const expenses=[], debts=[];
+let editingExpense=-1;
+let editingDebt=-1;
+
 const brl = n => (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function val(id){return Number(document.getElementById(id).value)||0}
 function go(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+document.querySelectorAll('.navin button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.navin button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}));
 
 function addExpense(){
  const name=document.getElementById('eName').value.trim(), value=val('eValue');
  if(!name || !value){alert('Informe pelo menos a descrição e o valor do gasto.');return}
- expenses.push({name,value,cat:eCat.value,meaning:eMeaning.value,score:eScore.value,loss:eLoss.value});
+ const item={name,value,cat:eCat.value,meaning:eMeaning.value,score:Number(eScore.value),loss:eLoss.value};
+ if(editingExpense>=0){
+   expenses[editingExpense]=item;
+   editingExpense=-1;
+   document.getElementById('expenseBtn').textContent='Adicionar gasto';
+   document.getElementById('cancelExpenseBtn').style.display='none';
+ }else{
+   expenses.push(item);
+ }
  ['eName','eValue','eLoss'].forEach(id=>document.getElementById(id).value='');
+ document.getElementById('eScore').value=5;
+ document.getElementById('scoreVal').textContent='5';
  renderExpenses();calc();
 }
-function removeExpense(i){expenses.splice(i,1);renderExpenses();calc()}
+
+function editExpense(i){
+ const x=expenses[i];
+ document.getElementById('eName').value=x.name;
+ document.getElementById('eValue').value=x.value;
+ document.getElementById('eCat').value=x.cat;
+ document.getElementById('eMeaning').value=x.meaning;
+ document.getElementById('eScore').value=x.score;
+ document.getElementById('scoreVal').textContent=x.score;
+ document.getElementById('eLoss').value=x.loss||'';
+ editingExpense=i;
+ document.getElementById('expenseBtn').textContent='Salvar alteração';
+ document.getElementById('cancelExpenseBtn').style.display='inline-block';
+ go('gastos');
+}
+
+function cancelExpenseEdit(){
+ editingExpense=-1;
+ ['eName','eValue','eLoss'].forEach(id=>document.getElementById(id).value='');
+ document.getElementById('eScore').value=5;
+ document.getElementById('scoreVal').textContent='5';
+ document.getElementById('expenseBtn').textContent='Adicionar gasto';
+ document.getElementById('cancelExpenseBtn').style.display='none';
+}
+
+function removeExpense(i){
+ if(!confirm('Excluir este gasto da sua jornada financeira?')) return;
+ expenses.splice(i,1); renderExpenses(); calc();
+}
+
 function renderExpenses(){
  const el=document.getElementById('expenseTable');
  if(!expenses.length){el.innerHTML='<div class="empty">Nenhum gasto cadastrado ainda.</div>';return}
- el.innerHTML='<table><thead><tr><th>Gasto</th><th>Valor</th><th>O que proporciona</th><th>Importância</th><th></th></tr></thead><tbody>'+
- expenses.map((x,i)=>`<tr><td><b>${esc(x.name)}</b><br><span class="small">${esc(x.cat)}</span></td><td>${brl(x.value)}</td><td>${esc(x.meaning)}${x.loss?'<br><span class="small">“'+esc(x.loss)+'”</span>':''}</td><td><span class="pill">${x.score}/10</span></td><td><button class="icon" onclick="removeExpense(${i})">✕</button></td></tr>`).join('')+
+ el.innerHTML='<table><thead><tr><th>Gasto</th><th>Valor</th><th>O que proporciona</th><th>Importância</th><th>Ação</th></tr></thead><tbody>'+
+ expenses.map((x,i)=>`<tr><td><b>${esc(x.name)}</b><br><span class="small">${esc(x.cat)}</span></td><td>${brl(x.value)}</td><td>${esc(x.meaning)}${x.loss?'<br><span class="small">“'+esc(x.loss)+'”</span>':''}</td><td><span class="pill">${x.score}/10</span></td><td><div class="row-actions"><button class="icon" title="Editar" onclick="editExpense(${i})">✏️</button><button class="icon" title="Excluir" onclick="removeExpense(${i})">✕</button></div></td></tr>`).join('')+
  '</tbody></table>';
 }
 
 function addDebt(){
  const name=document.getElementById('dName').value.trim(), value=val('dValue');
  if(!name || !value){alert('Informe pelo menos a descrição e o saldo da dívida.');return}
- debts.push({name,value,origin:dOrigin.value,repeat:dRepeat.value,good:dGood.value,change:dChange.value});
+ const item={name,value,origin:dOrigin.value,repeat:dRepeat.value,good:dGood.value,change:dChange.value};
+ if(editingDebt>=0){
+   debts[editingDebt]=item;
+   editingDebt=-1;
+   document.getElementById('debtBtn').textContent='Adicionar dívida';
+   document.getElementById('cancelDebtBtn').style.display='none';
+ }else{
+   debts.push(item);
+ }
  ['dName','dValue','dGood','dChange'].forEach(id=>document.getElementById(id).value='');
  renderDebts();calc();
 }
-function removeDebt(i){debts.splice(i,1);renderDebts();calc()}
+
+function editDebt(i){
+ const x=debts[i];
+ document.getElementById('dName').value=x.name;
+ document.getElementById('dValue').value=x.value;
+ document.getElementById('dOrigin').value=x.origin;
+ document.getElementById('dRepeat').value=x.repeat;
+ document.getElementById('dGood').value=x.good||'';
+ document.getElementById('dChange').value=x.change||'';
+ editingDebt=i;
+ document.getElementById('debtBtn').textContent='Salvar alteração';
+ document.getElementById('cancelDebtBtn').style.display='inline-block';
+ go('dividas');
+}
+
+function cancelDebtEdit(){
+ editingDebt=-1;
+ ['dName','dValue','dGood','dChange'].forEach(id=>document.getElementById(id).value='');
+ document.getElementById('debtBtn').textContent='Adicionar dívida';
+ document.getElementById('cancelDebtBtn').style.display='none';
+}
+
+function removeDebt(i){
+ if(!confirm('Excluir esta dívida da sua jornada financeira?')) return;
+ debts.splice(i,1); renderDebts(); calc();
+}
+
 function renderDebts(){
  const el=document.getElementById('debtTable');
  if(!debts.length){el.innerHTML='<div class="empty">Nenhuma dívida cadastrada ainda.</div>';return}
- el.innerHTML='<table><thead><tr><th>Dívida</th><th>Saldo</th><th>Origem</th><th>Pode voltar?</th><th></th></tr></thead><tbody>'+
- debts.map((x,i)=>`<tr><td><b>${esc(x.name)}</b></td><td>${brl(x.value)}</td><td>${esc(x.origin)}${x.good?'<br><span class="small">'+esc(x.good)+'</span>':''}</td><td>${esc(x.repeat)}${x.change?'<br><span class="small">Próxima vez: '+esc(x.change)+'</span>':''}</td><td><button class="icon" onclick="removeDebt(${i})">✕</button></td></tr>`).join('')+
+ el.innerHTML='<table><thead><tr><th>Dívida</th><th>Saldo</th><th>Origem</th><th>Pode voltar?</th><th>Ação</th></tr></thead><tbody>'+
+ debts.map((x,i)=>`<tr><td><b>${esc(x.name)}</b></td><td>${brl(x.value)}</td><td>${esc(x.origin)}${x.good?'<br><span class="small">'+esc(x.good)+'</span>':''}</td><td>${esc(x.repeat)}${x.change?'<br><span class="small">Próxima vez: '+esc(x.change)+'</span>':''}</td><td><div class="row-actions"><button class="icon" title="Editar" onclick="editDebt(${i})">✏️</button><button class="icon" title="Excluir" onclick="removeDebt(${i})">✕</button></div></td></tr>`).join('')+
  '</tbody></table>';
 }
 
@@ -351,45 +621,139 @@ function calc(){
  document.getElementById('sBalance').textContent=brl(bal);
  document.getElementById('sBalance').className='v '+(bal>=0?'good':'bad');
  document.getElementById('rExtra').textContent=brl(extra);
+
  const important=expenses.filter(x=>Number(x.score)>=7).reduce((a,x)=>a+x.value,0);
  const low=expenses.filter(x=>Number(x.score)<=3).reduce((a,x)=>a+x.value,0);
+ const qualityPct=exp?Math.round(important/exp*100):0;
+ const lowPct=exp?Math.round(low/exp*100):0;
+
  document.getElementById('reading').textContent=income?`Depois dos gastos cadastrados e da meta de poupança, o saldo estimado é ${brl(bal)}. Isso não é uma sentença: é um ponto de partida para decidir o que ajustar, preservar ou ampliar.`:'Cadastre sua renda para gerar a leitura.';
- document.getElementById('meaningReading').textContent=expenses.length?`Você identificou ${brl(important)} em gastos que considera muito importantes para sua qualidade de vida (7/10 ou mais) e ${brl(low)} em gastos de baixa importância (3/10 ou menos). A primeira pergunta não precisa ser “o que cortar?”, mas “o que merece ser preservado e o que pode ser repensado?”.`:'Registre alguns gastos e atribua importância a eles.';
+ document.getElementById('meaningReading').textContent=expenses.length?`${qualityPct}% dos gastos registrados estão associados a itens que você considera muito importantes para sua qualidade de vida (7/10 ou mais). ${lowPct}% estão na faixa de baixa importância (3/10 ou menos). Esses percentuais não dizem o que é certo ou errado: mostram onde seu dinheiro está concentrado em relação ao significado que você atribuiu a cada gasto.`:'Registre alguns gastos e atribua importância a eles para visualizar a relação entre dinheiro e qualidade de vida.';
+
  const recurring=debts.filter(x=>x.repeat==='Sim, é recorrente').reduce((a,x)=>a+x.value,0);
- document.getElementById('debtReading').textContent=debts.length?`As dívidas cadastradas somam ${brl(debt)}. ${recurring?`Há ${brl(recurring)} associadas a situações que você considera recorrentes. Isso merece atenção especial: quitar é importante, mas criar uma forma sustentável de pagar o que retorna também é parte da solução.`:'Pelo cadastro, não há dívidas marcadas como recorrentes.'}`:'Cadastre suas dívidas para investigar a origem e a possibilidade de repetição.';
- document.getElementById('nextReading').textContent=extra>0?`Sua meta de expansão está em ${brl(extra)} por mês. Pense nela como capacidade a construir: qual habilidade, serviço, trabalho ou oportunidade pode produzir esse valor sem destruir aquilo que você quer preservar?`:'Defina quanto de renda adicional ajudaria você a sustentar sua vida sem depender de novas dívidas.';
+ const recurringCount=debts.filter(x=>x.repeat==='Sim, é recorrente').length;
+ const recurringPct=debts.length?Math.round(recurringCount/debts.length*100):0;
+ document.getElementById('debtReading').textContent=debts.length?`${recurringPct}% das dívidas cadastradas estão associadas a situações que você marcou como recorrentes. ${recurring?`Elas somam ${brl(recurring)}. Isso merece atenção especial: quitar é importante, mas criar uma forma sustentável de pagar o que retorna também faz parte da solução.`:'Mesmo quando uma dívida é quitada, vale observar se a situação que a originou pode voltar.'}`:'Cadastre suas dívidas para investigar a origem e a possibilidade de repetição.';
+
+ const extraText=extra>0?`Sua meta de expansão está em ${brl(extra)} por mês.`:'Você ainda não definiu uma meta de renda adicional.';
+ document.getElementById('nextReading').textContent=buildNextSteps(extraText);
+ updateAwareness(qualityPct, recurringPct);
+ updateWellbeingGuidance();
+ updateEvolution();
  updateProgress();
 }
-function updateProgress(){
- const ids=['income','saveGoal','reserve','priorities','returnSpend','quitFeeling','noCut','extraNeed','skills','incomeIdea','nextStep','moneyFeeling','digitalMoney','calmDecision'];
- const filled=ids.filter(id=>document.getElementById(id).value.trim()).length;
- const pct=Math.round(filled/ids.length*100);
- document.getElementById('bar').style.width=pct+'%';
- document.getElementById('progressText').textContent=`Diagnóstico preenchido: ${pct}%`;
+
+
+function updateEvolution(){
+ const a=document.getElementById('evolutionChange')?.value.trim();
+ const l=document.getElementById('evolutionLearning')?.value.trim();
+ const ac=document.getElementById('evolutionAction')?.value.trim();
+ const n=document.getElementById('evolutionNext')?.value.trim();
+ const parts=[];
+ if(a) parts.push(`Você registrou uma mudança: “${esc(a)}”`);
+ if(l) parts.push(`Aprendizado: “${esc(l)}”`);
+ if(ac) parts.push(`Ação: “${esc(ac)}”`);
+ if(n) parts.push(`Próxima experiência: “${esc(n)}”`);
+ const text=parts.length?parts.join('<br><br>'):'Volte a esta ferramenta depois de um tempo para registrar o que mudou.';
+ document.getElementById('evolutionReading').innerHTML=text;
+ const result=document.getElementById('evolutionResult');
+ if(result) result.innerHTML=text;
 }
-document.addEventListener('input',updateProgress);
+
+function buildNextSteps(extraText){
+ const steps=[];
+ const emergency=document.getElementById('emergencyResponse')?.value||'';
+ const credit=[...document.querySelectorAll('input[name=credit]:checked')].length;
+ const follow=[...document.querySelectorAll('input[name=follow]:checked')].length;
+ if(emergency==='Cada emergência me desorganiza financeiramente') steps.push('criar uma estratégia para emergências');
+ if(debts.some(x=>x.repeat==='Sim, é recorrente')) steps.push('planejar como sustentar necessidades que podem voltar');
+ if(credit<6) steps.push('fortalecer sua preparação antes de contratar crédito');
+ if(val('extraNeed')>0) steps.push('construir uma possibilidade de renda adicional');
+ if(follow>0) steps.push('acompanhar os pontos que você escolheu para os próximos meses');
+ if(!steps.length) steps.push('revisar suas respostas periodicamente e registrar o que mudou');
+ const reservePurpose=document.getElementById('savingPurpose')?.value||'Ainda não sei';
+ if(reservePurpose==='Ainda não sei') steps.push('definir o que uma reserva significaria para sua realidade');
+ return `${extraText} Próximos movimentos possíveis: ${steps.join('; ')}.`;
+}
+
+function updateAwareness(qualityPct, recurringPct){
+ const creditTotal=6;
+ const creditChecked=document.querySelectorAll('input[name=credit]:checked').length;
+ const creditPct=Math.round(creditChecked/creditTotal*100);
+ const emergency=document.getElementById('emergencyResponse')?.value||'Ainda não sei';
+ const reserve=val('reserve'), income=val('income');
+ const reserveMonths=income?reserve/income:0;
+ document.getElementById('awarenessReading').innerHTML=
+ `<b>Qualidade de vida:</b> ${qualityPct}% dos gastos registrados estão na faixa que você considera muito importante.<br>`+
+ `<b>Recorrência das dívidas:</b> ${recurringPct}% das dívidas cadastradas foram marcadas como recorrentes.<br>`+
+ `<b>Consciência antes do crédito:</b> ${creditPct}% dos 6 aspectos estão sendo considerados.<br>`+
+ `<b>Preparação para emergências:</b> ${esc(emergency)}${income&&reserve>0?` — sua reserva atual equivale a aproximadamente ${reserveMonths.toFixed(1)} mês(es) da renda informada.`:''}<br>`+
+ `<b>Finalidade da reserva:</b> ${esc(document.getElementById('savingPurpose')?.value||'Ainda não definida')}`;
+}
+
+function updateWellbeingGuidance(){
+ const feel=[...document.querySelectorAll('input[name=feel]:checked')].map(x=>x.value);
+ const awareness=document.getElementById('spendingAwareness')?.value||'Ainda não sei';
+ const emergency=document.getElementById('emergencyResponse')?.value||'Ainda não sei';
+ const guidance=[];
+ if(feel.includes('ansiedade')||feel.includes('medo')) guidance.push('observe quais situações financeiras mais ativam preocupação e transforme uma delas em um próximo passo concreto');
+ if(feel.includes('culpa')||feel.includes('vergonha')) guidance.push('evite transformar uma decisão financeira em julgamento sobre você; procure entender o contexto e o que pode ser feito daqui para frente');
+ if(awareness.includes('impulso')||awareness.includes('reagir')||awareness.includes('depois')) guidance.push('crie uma pequena pausa antes de compras ou decisões de crédito');
+ if(emergency==='Cada emergência me desorganiza financeiramente') guidance.push('comece a construir uma estratégia específica para imprevistos');
+ if(!guidance.length) guidance.push('continue registrando mudanças; consciência financeira se constrói ao longo do tempo, não em um único preenchimento');
+ document.getElementById('wellbeingGuidance').textContent=guidance.join('. ')+'.';
+}
 
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 
 function saveData(){
- const data={income:income.value,saveGoal:saveGoal.value,reserve:reserve.value,extraNeed:extraNeed.value,priorities:priorities.value,returnSpend:returnSpend.value,quitFeeling:quitFeeling.value,noCut:noCut.value,skills:skills.value,incomeIdea:incomeIdea.value,nextStep:nextStep.value,moneyFeeling:moneyFeeling.value,spendingAwareness:spendingAwareness.value,digitalMoney:digitalMoney.value,calmDecision:calmDecision.value,feel:[...document.querySelectorAll('input[name=feel]:checked')].map(x=>x.value),credit:[...document.querySelectorAll('input[name=credit]:checked')].map(x=>x.value),expenses,debts};
+ const data={
+ income:income.value,saveGoal:saveGoal.value,reserve:reserve.value,extraNeed:extraNeed.value,savingPurpose:savingPurpose.value,reserveProtection:reserveProtection.value,
+ priorities:priorities.value,returnSpend:returnSpend.value,quitFeeling:quitFeeling.value,noCut:noCut.value,
+ skills:skills.value,incomeIdea:incomeIdea.value,nextStep:nextStep.value,moneyFeeling:moneyFeeling.value,
+ spendingAwareness:spendingAwareness.value,digitalMoney:digitalMoney.value,calmDecision:calmDecision.value,emotionDecision:emotionDecision.value,
+ evolutionChange:evolutionChange.value,evolutionLearning:evolutionLearning.value,evolutionAction:evolutionAction.value,evolutionNext:evolutionNext.value,
+ emergencyResponse:emergencyResponse.value,emergencyPlan:emergencyPlan.value,
+ feel:[...document.querySelectorAll('input[name=feel]:checked')].map(x=>x.value),
+ moneyImpact:[...document.querySelectorAll('input[name=moneyImpact]:checked')].map(x=>x.value),
+ credit:[...document.querySelectorAll('input[name=credit]:checked')].map(x=>x.value),
+ follow:[...document.querySelectorAll('input[name=follow]:checked')].map(x=>x.value),
+ expenses,debts
+ };
  localStorage.setItem('meuDinheiroMinhaVida',JSON.stringify(data));
- alert('Diagnóstico salvo neste dispositivo.');
+ alert('Jornada financeira salva neste dispositivo.');
 }
+
 function loadData(){
  try{
- const d=JSON.parse(localStorage.getItem('meuDinheiroMinhaVida')||'null'); if(!d)return;
- ['income','saveGoal','reserve','extraNeed','priorities','returnSpend','quitFeeling','noCut','skills','incomeIdea','nextStep','moneyFeeling','spendingAwareness','digitalMoney','calmDecision'].forEach(id=>{if(d[id]!==undefined && document.getElementById(id))document.getElementById(id).value=d[id]});
-if(d.feel) document.querySelectorAll('input[name=feel]').forEach(x=>x.checked=d.feel.includes(x.value));
-if(d.credit) document.querySelectorAll('input[name=credit]').forEach(x=>x.checked=d.credit.includes(x.value));
- expenses.push(...(d.expenses||[])); debts.push(...(d.debts||[])); renderExpenses();renderDebts();calc();
+  const d=JSON.parse(localStorage.getItem('meuDinheiroMinhaVida')||'null'); if(!d)return;
+  ['income','saveGoal','reserve','extraNeed','savingPurpose','reserveProtection','priorities','returnSpend','quitFeeling','noCut','skills','incomeIdea','nextStep','moneyFeeling','spendingAwareness','digitalMoney','calmDecision','emotionDecision','evolutionChange','evolutionLearning','evolutionAction','evolutionNext','emergencyResponse','emergencyPlan'].forEach(id=>{if(d[id]!==undefined && document.getElementById(id))document.getElementById(id).value=d[id]});
+  if(d.feel) document.querySelectorAll('input[name=feel]').forEach(x=>x.checked=d.feel.includes(x.value));
+  if(d.moneyImpact) document.querySelectorAll('input[name=moneyImpact]').forEach(x=>x.checked=d.moneyImpact.includes(x.value));
+  if(d.credit) document.querySelectorAll('input[name=credit]').forEach(x=>x.checked=d.credit.includes(x.value));
+  if(d.follow) document.querySelectorAll('input[name=follow]').forEach(x=>x.checked=d.follow.includes(x.value));
+  expenses.push(...(d.expenses||[])); debts.push(...(d.debts||[])); renderExpenses();renderDebts();calc();
  }catch(e){}
 }
+
 function clearData(){
- if(!confirm('Isso apagará os dados deste diagnóstico neste dispositivo. Continuar?'))return;
+ if(!confirm('Isso apagará os dados desta jornada financeira neste dispositivo. Continuar?'))return;
  localStorage.removeItem('meuDinheiroMinhaVida'); location.reload();
 }
+
 renderExpenses();renderDebts();loadData();calc();
+
+function updateProgress(){
+ const ids=['income','saveGoal','reserve','priorities','returnSpend','quitFeeling','noCut','extraNeed','skills','incomeIdea','nextStep','moneyFeeling','digitalMoney','calmDecision','emergencyPlan','reserveProtection','emotionDecision','evolutionChange','evolutionLearning','evolutionAction','evolutionNext'];
+ const filled=ids.filter(id=>document.getElementById(id).value.trim()).length;
+ const pct=Math.round(filled/ids.length*100);
+ document.getElementById('bar').style.width=pct+'%';
+ document.getElementById('progressText').textContent=`Jornada preenchida: ${pct}%`;
+}
+document.addEventListener('input',()=>{updateProgress();calc();});
+document.addEventListener('change',()=>{updateProgress();calc();});
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 
 let activeRecognition=null;
 let activeButton=null;
