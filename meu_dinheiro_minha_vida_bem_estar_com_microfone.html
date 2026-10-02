@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Dinheiro, Minha Vida — Diagnóstico Financeiro</title>
+<style>
+:root{
+  --bg:#f4f7f6; --card:#ffffff; --ink:#20302f; --muted:#687876;
+  --primary:#177f7c; --primary2:#0f6663; --gold:#c89b3c;
+  --line:#dfe8e6; --soft:#e9f4f2; --danger:#b75b5b; --good:#4d8765;
+  --shadow:0 10px 30px rgba(22,55,52,.08); --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.5}
+header{background:linear-gradient(135deg,#0e6461,#1c8d88);color:white;padding:42px 20px 36px}
+.wrap{max-width:1120px;margin:auto}
+.brand{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.05;margin:10px 0}
+.subtitle{max-width:760px;font-size:17px;opacity:.92}
+nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.navin{display:flex;gap:8px;overflow:auto;padding:10px 4px}
+.navin button{white-space:nowrap;border:0;background:transparent;color:var(--muted);padding:10px 13px;border-radius:10px;cursor:pointer;font-weight:600}
+.navin button.active,.navin button:hover{background:var(--soft);color:var(--primary2)}
+main{padding:28px 16px 70px}
+section{scroll-margin-top:75px;margin:0 0 28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+.hero-note{border-left:4px solid var(--gold);background:#fffaf0}
+h2{margin:0 0 7px;font-size:25px}
+h3{margin:18px 0 10px}
+p{margin:7px 0}
+.small{font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;font-weight:700;color:#40514f}
+input,select,textarea{width:100%;border:1px solid #ccd9d6;border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);font:inherit}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:3px solid #d6eeeb;border-color:var(--primary)}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button.primary,.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:700;cursor:pointer}
+.primary{background:var(--primary);color:#fff}.primary:hover{background:var(--primary2)}
+.secondary{background:#edf3f2;color:var(--primary2)}
+.danger{background:#faeeee;color:var(--danger)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.stat{padding:17px;border:1px solid var(--line);border-radius:14px;background:#fbfcfc}
+.stat .v{font-size:24px;font-weight:800;margin-top:3px}
+.good{color:var(--good)}.bad{color:var(--danger)}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.row-actions{display:flex;gap:6px}
+.icon{border:0;background:#f0f4f3;border-radius:8px;padding:7px;cursor:pointer}
+.pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:var(--soft);color:var(--primary2);font-size:12px;font-weight:700}
+.range{display:flex;align-items:center;gap:12px}.range input{padding:0}
+.question{padding:16px;background:#fafcfc;border:1px solid var(--line);border-radius:14px;margin-top:12px}
+.question strong{display:block;margin-bottom:7px}
+.result{background:linear-gradient(135deg,#eff8f6,#fff);border:1px solid #cde5e1}
+.quote{font-size:19px;font-weight:700;color:var(--primary2);padding:18px 0}
+.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed #cbd8d5;border-radius:12px}
+.progress{height:8px;background:#e7eeec;border-radius:20px;overflow:hidden;margin-top:12px}.bar{height:100%;background:var(--primary);width:0;transition:.3s}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:800px){.grid,.grid2,.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid,.grid2,.stats{grid-template-columns:1fr}.card{padding:18px}h1{font-size:34px}table{font-size:13px}}
+
+.voice-wrap{position:relative}
+.voice-wrap textarea{padding-right:108px}
+.voice-btn{position:absolute;right:8px;top:8px;border:0;border-radius:9px;padding:8px 10px;background:#e9f4f2;color:#0f6663;font-weight:800;cursor:pointer;font-size:12px}
+.voice-btn:hover{background:#d9ece9}
+.voice-btn.recording{background:#faeeee;color:#b75b5b}
+.voice-status{font-size:11px;color:#687876;margin-top:5px;min-height:16px}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap">
+<div class="brand">Diagnóstico financeiro pessoal</div>
+<h1>Meu dinheiro, minha vida.</h1>
+<div class="subtitle">Uma ferramenta para compreender dinheiro, dívidas, escolhas e qualidade de vida — sem culpa e sem julgamentos.</div>
+</div>
+</header>
+
+<nav><div class="wrap navin">
+<button onclick="go('inicio')">Início</button>
+<button onclick="go('retrato')">Meu retrato</button>
+<button onclick="go('gastos')">Meus gastos</button>
+<button onclick="go('dividas')">Minhas dívidas</button>
+<button onclick="go('sentido')">O que importa</button>
+<button onclick="go('renda')">Minha expansão</button>
+<button onclick="go('bemestar')">Bem-estar</button><button onclick="go('resultado')">Meu diagnóstico</button>
+</div></nav>
+
+<main class="wrap">
+<section id="inicio">
+<div class="card hero-note">
+<h2>Antes de cortar, compreenda.</h2>
+<p>Nem todo gasto é desperdício. Nem toda dívida nasceu de irresponsabilidade. E nem toda economia melhora a vida.</p>
+<p>Este diagnóstico começa pelos números, mas não termina neles. A proposta é descobrir <b>o que seu dinheiro está fazendo pela sua vida</b>, o que está comprometendo seu futuro e onde pode existir espaço para aumentar sua renda.</p>
+<div class="quote">“Não se trata apenas de gastar menos. Trata-se de escolher melhor — e aumentar a capacidade de sustentar o que importa.”</div>
+</div>
+</section>
+
+<section id="retrato">
+<div class="card">
+<h2>1. Meu retrato financeiro</h2>
+<p class="small">Comece com a realidade atual. Sem tentar deixá-la bonita.</p>
+<div class="grid" style="margin-top:16px">
+<div class="field"><label>Renda líquida mensal</label><input id="income" type="number" min="0" step="0.01" placeholder="0,00" oninput="calc()"></div>
+<div class="field"><label>Valor que desejo guardar mensalmente</label><input id="saveGoal" type="number" min="0" step="0.01" placeholder="0,00" oninput="calc()"></div>
+<div class="field"><label>Reserva financeira atual</label><input id="reserve" type="number" min="0" step="0.01" placeholder="0,00"></div>
+</div>
+<div class="stats">
+<div class="stat"><div class="small">Renda</div><div class="v" id="sIncome">R$ 0,00</div></div>
+<div class="stat"><div class="small">Gastos cadastrados</div><div class="v" id="sExpense">R$ 0,00</div></div>
+<div class="stat"><div class="small">Dívidas cadastradas</div><div class="v" id="sDebt">R$ 0,00</div></div>
+<div class="stat"><div class="small">Saldo mensal estimado</div><div class="v" id="sBalance">R$ 0,00</div></div>
+</div>
+</div>
+</section>
+
+<section id="gastos">
+<div class="card">
+<h2>2. Meus gastos e o valor que eles geram</h2>
+<p class="small">Registre gastos recorrentes ou relevantes. A pergunta não é “é supérfluo?”, e sim “o que isso entrega para mim?”.</p>
+<div class="grid2" style="margin-top:16px">
+<div class="field"><label>Descrição</label><input id="eName" placeholder="Ex.: salão, jantar, aluguel, curso"></div>
+<div class="field"><label>Valor mensal</label><input id="eValue" type="number" min="0" step="0.01"></div>
+<div class="field"><label>Categoria</label><select id="eCat"><option>Moradia</option><option>Alimentação</option><option>Transporte</option><option>Saúde</option><option>Educação</option><option>Família</option><option>Trabalho / negócio</option><option>Lazer</option><option>Autocuidado</option><option>Compras</option><option>Outros</option></select></div>
+<div class="field"><label>O que esse gasto proporciona?</label><select id="eMeaning"><option>Necessidade básica</option><option>Segurança / tranquilidade</option><option>Saúde / bem-estar</option><option>Autoestima / autocuidado</option><option>Convivência / relacionamento</option><option>Descanso / diversão</option><option>Conhecimento / crescimento</option><option>Possibilidade de renda</option><option>Praticidade / tempo</option><option>Prazer momentâneo</option><option>Ainda não sei</option></select></div>
+</div>
+<div class="field" style="margin-top:14px"><label>Quanto esse gasto importa para sua qualidade de vida?</label><div class="range"><input id="eScore" type="range" min="0" max="10" value="5" oninput="document.getElementById('scoreVal').textContent=this.value"><b id="scoreVal">5</b>/10</div></div>
+<div class="field" style="margin-top:14px"><label>Se eu tivesse que reduzir esse gasto, o que eu sentiria que estou perdendo?</label><div class="voice-wrap"><textarea id="eLoss" placeholder="Ex.: perderia um momento de cuidado comigo, deixaria de encontrar meus amigos..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div></div>
+<div class="btns"><button class="primary btn" onclick="addExpense()">Adicionar gasto</button></div>
+<div id="expenseTable" style="margin-top:18px"></div>
+</div>
+</section>
+
+<section id="dividas">
+<div class="card">
+<h2>3. Minhas dívidas — de onde elas vieram?</h2>
+<p class="small">Uma dívida é um fato financeiro. A história por trás dela ajuda a decidir o que precisa mudar.</p>
+<div class="grid2" style="margin-top:16px">
+<div class="field"><label>Descrição da dívida</label><input id="dName" placeholder="Ex.: empréstimo, cartão, financiamento"></div>
+<div class="field"><label>Saldo atual</label><input id="dValue" type="number" min="0" step="0.01"></div>
+<div class="field"><label>Em que o dinheiro foi usado?</label><select id="dOrigin"><option>Necessidade / subsistência</option><option>Emergência</option><option>Saúde</option><option>Moradia</option><option>Família</option><option>Educação</option><option>Investimento / negócio</option><option>Lazer / experiências</option><option>Autocuidado</option><option>Compras / consumo</option><option>Outro</option></select></div>
+<div class="field"><label>O gasto pode voltar a acontecer?</label><select id="dRepeat"><option>Sim, é recorrente</option><option>Talvez</option><option>Não, foi pontual</option></select></div>
+</div>
+<div class="grid2" style="margin-top:14px">
+<div class="field"><label>O que esse gasto trouxe de bom?</label><div class="voice-wrap"><textarea id="dGood" placeholder="Ex.: resolveu uma emergência, trouxe autoestima, permitiu trabalhar..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div></div>
+<div class="field"><label>O que você gostaria que fosse diferente da próxima vez?</label><div class="voice-wrap"><textarea id="dChange" placeholder="Ex.: ter uma reserva, criar renda extra, planejar o gasto..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div></div>
+</div>
+<div class="btns"><button class="primary btn" onclick="addDebt()">Adicionar dívida</button></div>
+<div id="debtTable" style="margin-top:18px"></div>
+</div>
+</section>
+
+<section id="sentido">
+<div class="card">
+<h2>4. O que realmente importa para mim?</h2>
+<p class="small">Agora saímos dos lançamentos e olhamos para a vida.</p>
+<div class="question">
+<strong>Se eu tivesse que escolher três coisas que quero preservar mesmo durante uma fase financeira difícil, quais seriam?</strong>
+<div class="voice-wrap"><textarea id="priorities" placeholder="Ex.: minha saúde, encontros com amigos, cuidar da aparência, viajar, estudar..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+<div class="question">
+<strong>Existe algum gasto que eu vivo tentando cortar, mas sempre volto a fazer?</strong>
+<div class="voice-wrap"><textarea id="returnSpend" placeholder="Qual é? Por que você acha que ele volta? O que ele representa?"></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+<div class="question">
+<strong>Quando penso em quitar minhas dívidas, que sensação eu quero produzir?</strong>
+<div class="voice-wrap"><textarea id="quitFeeling" placeholder="Alívio? Liberdade? Segurança? Orgulho? Paz? Possibilidade de recomeçar?"></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+<div class="question">
+<strong>O que eu não quero fazer para economizar?</strong>
+<div class="voice-wrap"><textarea id="noCut" placeholder="Ex.: abandonar completamente o lazer, deixar de cuidar de mim..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+</div>
+</section>
+
+<section id="renda">
+<div class="card">
+<h2>5. Minha expansão de renda</h2>
+<p class="small">Aqui está o outro lado da educação financeira: em vez de perguntar somente “o que cortar?”, perguntar “o que posso construir?”.</p>
+<div class="question">
+<strong>Quanto dinheiro adicional por mês tornaria minha vida mais sustentável?</strong>
+<div class="field"><input id="extraNeed" type="number" min="0" step="0.01" placeholder="R$ 0,00" oninput="calc()"></div>
+</div>
+<div class="question">
+<strong>Quais conhecimentos, habilidades ou recursos eu já tenho que poderiam gerar renda?</strong>
+<div class="voice-wrap"><textarea id="skills" placeholder="Ex.: experiência profissional, aulas, culinária, organização, vendas, tecnologia, artesanato..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+<div class="question">
+<strong>Que nova fonte de renda eu poderia testar sem comprometer minha segurança atual?</strong>
+<div class="voice-wrap"><textarea id="incomeIdea" placeholder="Uma ideia concreta, mesmo que pequena."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+<div class="question">
+<strong>O que preciso aprender ou mudar para essa possibilidade acontecer?</strong>
+<div class="voice-wrap"><textarea id="nextStep" placeholder="Curso, divulgação, equipamento, portfólio, contatos, tempo..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+</div>
+</section>
+
+
+<section id="bemestar">
+<div class="card">
+<h2>6. Meu bem-estar financeiro</h2>
+<p class="small">Dinheiro também produz emoções. Esta etapa não diagnostica saúde mental e não substitui acompanhamento profissional. Ela ajuda a perceber como a situação financeira está afetando suas decisões e sua sensação de segurança.</p>
+
+<div class="question">
+<strong>Quando penso na minha situação financeira hoje, o que mais aparece?</strong>
+<div class="checks" style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:9px">
+<label class="check"><input type="checkbox" name="feel" value="ansiedade"> Ansiedade / preocupação</label>
+<label class="check"><input type="checkbox" name="feel" value="culpa"> Culpa</label>
+<label class="check"><input type="checkbox" name="feel" value="vergonha"> Vergonha</label>
+<label class="check"><input type="checkbox" name="feel" value="medo"> Medo / insegurança</label>
+<label class="check"><input type="checkbox" name="feel" value="frustracao"> Frustração</label>
+<label class="check"><input type="checkbox" name="feel" value="alivio"> Alívio / esperança</label>
+<label class="check"><input type="checkbox" name="feel" value="controle"> Sensação de controle</label>
+<label class="check"><input type="checkbox" name="feel" value="confusao"> Confusão / dificuldade de decidir</label>
+</div>
+</div>
+
+<div class="question">
+<strong>O que acontece comigo quando vejo o dinheiro diminuindo?</strong>
+<div class="voice-wrap"><textarea id="moneyFeeling" placeholder="Ex.: fico angustiada, quero parar de gastar imediatamente, sinto que trabalhei e não tenho nada, começo a evitar olhar a conta..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question">
+<strong>Quando gasto, estou escolhendo ou apenas reagindo?</strong>
+<select id="spendingAwareness">
+<option>Ainda não sei</option>
+<option>Na maioria das vezes eu escolho conscientemente</option>
+<option>Às vezes gasto para aliviar uma sensação</option>
+<option>Às vezes compro por impulso</option>
+<option>Muitas vezes só percebo depois que gastei</option>
+</select>
+</div>
+
+<div class="question">
+<strong>Antes de contratar crédito, eu consigo responder:</strong>
+<div class="checks" style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:9px">
+<label class="check"><input type="checkbox" name="credit" value="purpose"> Para que exatamente vou usar?</label>
+<label class="check"><input type="checkbox" name="credit" value="total"> Quanto vou pagar no total?</label>
+<label class="check"><input type="checkbox" name="credit" value="monthly"> A parcela cabe depois dos gastos essenciais?</label>
+<label class="check"><input type="checkbox" name="credit" value="return"> Essa necessidade vai continuar depois que eu quitar?</label>
+<label class="check"><input type="checkbox" name="credit" value="alternative"> Existe outra forma de conseguir o mesmo objetivo?</label>
+<label class="check"><input type="checkbox" name="credit" value="income"> O crédito vai gerar ou preservar alguma renda/segurança?</label>
+</div>
+</div>
+
+<div class="question">
+<strong>Meu dinheiro é digital. Que hábito pode me ajudar a tornar o gasto mais consciente?</strong>
+<div class="voice-wrap"><textarea id="digitalMoney" placeholder="Ex.: olhar o saldo antes de comprar, esperar 24 horas, registrar compras, separar dinheiro por finalidade, revisar o cartão semanalmente..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question">
+<strong>Que decisão financeira quero tomar com mais calma?</strong>
+<div class="voice-wrap"><textarea id="calmDecision" placeholder="Uma dívida, uma compra, um empréstimo, um corte de gasto, uma fonte de renda..."></textarea><button type="button" class="voice-btn" onclick="toggleVoice(this)">🎙️ Falar</button><div class="voice-status" aria-live="polite"></div></div>
+</div>
+
+<div class="question" style="background:#eef8f6">
+<strong>Uma lembrança importante</strong>
+<p>O objetivo não é eliminar todas as emoções envolvidas com dinheiro. É criar espaço entre a emoção e a decisão. <b>Conhecer o que sentimos aumenta nossa capacidade de escolher.</b></p>
+</div>
+</div>
+</section>
+
+<section id="resultado">
+<div class="card result">
+<h2>7. Meu diagnóstico</h2>
+<p>Esta tela reúne os números e as reflexões. Ela não dá uma nota para sua vida financeira. Ela ajuda a enxergar relações.</p>
+<div class="stats">
+<div class="stat"><div class="small">Renda mensal</div><div class="v" id="rIncome">R$ 0,00</div></div>
+<div class="stat"><div class="small">Gastos registrados</div><div class="v" id="rExpenses">R$ 0,00</div></div>
+<div class="stat"><div class="small">Dívidas</div><div class="v" id="rDebts">R$ 0,00</div></div>
+<div class="stat"><div class="small">Renda extra desejada</div><div class="v" id="rExtra">R$ 0,00</div></div>
+</div>
+<div class="question">
+<strong>Leitura financeira</strong>
+<p id="reading">Cadastre seus dados para gerar uma leitura.</p>
+</div>
+<div class="question">
+<strong>Leitura de significado</strong>
+<p id="meaningReading">Registre seus gastos e reflexões para enxergar o que o dinheiro está sustentando.</p>
+</div>
+<div class="question">
+<strong>Leitura das dívidas</strong>
+<p id="debtReading">Cadastre as dívidas para entender se existe algum padrão que pode voltar a aparecer.</p>
+</div>
+<div class="question">
+<strong>Próximo movimento</strong>
+<p id="nextReading">O próximo passo não precisa ser um corte. Pode ser uma decisão, um planejamento ou uma nova fonte de renda.</p>
+</div>
+<div class="btns">
+<button class="primary btn" onclick="saveData()">Salvar neste dispositivo</button>
+<button class="secondary btn" onclick="window.print()">Imprimir / salvar em PDF</button>
+<button class="danger btn" onclick="clearData()">Limpar diagnóstico</button>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<p class="small" id="progressText"></p>
+</div>
+</section>
+</main>
+
+<footer>Meu dinheiro, minha vida. • Diagnóstico pessoal • Os dados ficam no seu dispositivo quando você usa “Salvar”.</footer>
+
+<script>
+const expenses=[], debts=[];
+const brl = n => (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+function val(id){return Number(document.getElementById(id).value)||0}
+function go(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+
+function addExpense(){
+ const name=document.getElementById('eName').value.trim(), value=val('eValue');
+ if(!name || !value){alert('Informe pelo menos a descrição e o valor do gasto.');return}
+ expenses.push({name,value,cat:eCat.value,meaning:eMeaning.value,score:eScore.value,loss:eLoss.value});
+ ['eName','eValue','eLoss'].forEach(id=>document.getElementById(id).value='');
+ renderExpenses();calc();
+}
+function removeExpense(i){expenses.splice(i,1);renderExpenses();calc()}
+function renderExpenses(){
+ const el=document.getElementById('expenseTable');
+ if(!expenses.length){el.innerHTML='<div class="empty">Nenhum gasto cadastrado ainda.</div>';return}
+ el.innerHTML='<table><thead><tr><th>Gasto</th><th>Valor</th><th>O que proporciona</th><th>Importância</th><th></th></tr></thead><tbody>'+
+ expenses.map((x,i)=>`<tr><td><b>${esc(x.name)}</b><br><span class="small">${esc(x.cat)}</span></td><td>${brl(x.value)}</td><td>${esc(x.meaning)}${x.loss?'<br><span class="small">“'+esc(x.loss)+'”</span>':''}</td><td><span class="pill">${x.score}/10</span></td><td><button class="icon" onclick="removeExpense(${i})">✕</button></td></tr>`).join('')+
+ '</tbody></table>';
+}
+
+function addDebt(){
+ const name=document.getElementById('dName').value.trim(), value=val('dValue');
+ if(!name || !value){alert('Informe pelo menos a descrição e o saldo da dívida.');return}
+ debts.push({name,value,origin:dOrigin.value,repeat:dRepeat.value,good:dGood.value,change:dChange.value});
+ ['dName','dValue','dGood','dChange'].forEach(id=>document.getElementById(id).value='');
+ renderDebts();calc();
+}
+function removeDebt(i){debts.splice(i,1);renderDebts();calc()}
+function renderDebts(){
+ const el=document.getElementById('debtTable');
+ if(!debts.length){el.innerHTML='<div class="empty">Nenhuma dívida cadastrada ainda.</div>';return}
+ el.innerHTML='<table><thead><tr><th>Dívida</th><th>Saldo</th><th>Origem</th><th>Pode voltar?</th><th></th></tr></thead><tbody>'+
+ debts.map((x,i)=>`<tr><td><b>${esc(x.name)}</b></td><td>${brl(x.value)}</td><td>${esc(x.origin)}${x.good?'<br><span class="small">'+esc(x.good)+'</span>':''}</td><td>${esc(x.repeat)}${x.change?'<br><span class="small">Próxima vez: '+esc(x.change)+'</span>':''}</td><td><button class="icon" onclick="removeDebt(${i})">✕</button></td></tr>`).join('')+
+ '</tbody></table>';
+}
+
+function calc(){
+ const income=val('income'), save=val('saveGoal'), exp=expenses.reduce((a,x)=>a+x.value,0), debt=debts.reduce((a,x)=>a+x.value,0), extra=val('extraNeed');
+ const bal=income-exp-save;
+ ['sIncome','rIncome'].forEach(id=>document.getElementById(id).textContent=brl(income));
+ ['sExpense','rExpenses'].forEach(id=>document.getElementById(id).textContent=brl(exp));
+ ['sDebt','rDebts'].forEach(id=>document.getElementById(id).textContent=brl(debt));
+ document.getElementById('sBalance').textContent=brl(bal);
+ document.getElementById('sBalance').className='v '+(bal>=0?'good':'bad');
+ document.getElementById('rExtra').textContent=brl(extra);
+ const important=expenses.filter(x=>Number(x.score)>=7).reduce((a,x)=>a+x.value,0);
+ const low=expenses.filter(x=>Number(x.score)<=3).reduce((a,x)=>a+x.value,0);
+ document.getElementById('reading').textContent=income?`Depois dos gastos cadastrados e da meta de poupança, o saldo estimado é ${brl(bal)}. Isso não é uma sentença: é um ponto de partida para decidir o que ajustar, preservar ou ampliar.`:'Cadastre sua renda para gerar a leitura.';
+ document.getElementById('meaningReading').textContent=expenses.length?`Você identificou ${brl(important)} em gastos que considera muito importantes para sua qualidade de vida (7/10 ou mais) e ${brl(low)} em gastos de baixa importância (3/10 ou menos). A primeira pergunta não precisa ser “o que cortar?”, mas “o que merece ser preservado e o que pode ser repensado?”.`:'Registre alguns gastos e atribua importância a eles.';
+ const recurring=debts.filter(x=>x.repeat==='Sim, é recorrente').reduce((a,x)=>a+x.value,0);
+ document.getElementById('debtReading').textContent=debts.length?`As dívidas cadastradas somam ${brl(debt)}. ${recurring?`Há ${brl(recurring)} associadas a situações que você considera recorrentes. Isso merece atenção especial: quitar é importante, mas criar uma forma sustentável de pagar o que retorna também é parte da solução.`:'Pelo cadastro, não há dívidas marcadas como recorrentes.'}`:'Cadastre suas dívidas para investigar a origem e a possibilidade de repetição.';
+ document.getElementById('nextReading').textContent=extra>0?`Sua meta de expansão está em ${brl(extra)} por mês. Pense nela como capacidade a construir: qual habilidade, serviço, trabalho ou oportunidade pode produzir esse valor sem destruir aquilo que você quer preservar?`:'Defina quanto de renda adicional ajudaria você a sustentar sua vida sem depender de novas dívidas.';
+ updateProgress();
+}
+function updateProgress(){
+ const ids=['income','saveGoal','reserve','priorities','returnSpend','quitFeeling','noCut','extraNeed','skills','incomeIdea','nextStep','moneyFeeling','digitalMoney','calmDecision'];
+ const filled=ids.filter(id=>document.getElementById(id).value.trim()).length;
+ const pct=Math.round(filled/ids.length*100);
+ document.getElementById('bar').style.width=pct+'%';
+ document.getElementById('progressText').textContent=`Diagnóstico preenchido: ${pct}%`;
+}
+document.addEventListener('input',updateProgress);
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function saveData(){
+ const data={income:income.value,saveGoal:saveGoal.value,reserve:reserve.value,extraNeed:extraNeed.value,priorities:priorities.value,returnSpend:returnSpend.value,quitFeeling:quitFeeling.value,noCut:noCut.value,skills:skills.value,incomeIdea:incomeIdea.value,nextStep:nextStep.value,moneyFeeling:moneyFeeling.value,spendingAwareness:spendingAwareness.value,digitalMoney:digitalMoney.value,calmDecision:calmDecision.value,feel:[...document.querySelectorAll('input[name=feel]:checked')].map(x=>x.value),credit:[...document.querySelectorAll('input[name=credit]:checked')].map(x=>x.value),expenses,debts};
+ localStorage.setItem('meuDinheiroMinhaVida',JSON.stringify(data));
+ alert('Diagnóstico salvo neste dispositivo.');
+}
+function loadData(){
+ try{
+ const d=JSON.parse(localStorage.getItem('meuDinheiroMinhaVida')||'null'); if(!d)return;
+ ['income','saveGoal','reserve','extraNeed','priorities','returnSpend','quitFeeling','noCut','skills','incomeIdea','nextStep','moneyFeeling','spendingAwareness','digitalMoney','calmDecision'].forEach(id=>{if(d[id]!==undefined && document.getElementById(id))document.getElementById(id).value=d[id]});
+if(d.feel) document.querySelectorAll('input[name=feel]').forEach(x=>x.checked=d.feel.includes(x.value));
+if(d.credit) document.querySelectorAll('input[name=credit]').forEach(x=>x.checked=d.credit.includes(x.value));
+ expenses.push(...(d.expenses||[])); debts.push(...(d.debts||[])); renderExpenses();renderDebts();calc();
+ }catch(e){}
+}
+function clearData(){
+ if(!confirm('Isso apagará os dados deste diagnóstico neste dispositivo. Continuar?'))return;
+ localStorage.removeItem('meuDinheiroMinhaVida'); location.reload();
+}
+renderExpenses();renderDebts();loadData();calc();
+
+let activeRecognition=null;
+let activeButton=null;
+
+function toggleVoice(button){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){
+    alert('O reconhecimento de voz não está disponível neste navegador. Tente usar o Chrome no celular.');
+    return;
+  }
+  if(activeRecognition){
+    activeRecognition.stop();
+    return;
+  }
+  const wrap=button.closest('.voice-wrap');
+  const textarea=wrap.querySelector('textarea');
+  const status=wrap.querySelector('.voice-status');
+  const recognition=new SpeechRecognition();
+  recognition.lang='pt-BR';
+  recognition.continuous=true;
+  recognition.interimResults=true;
+  let finalText=textarea.value ? textarea.value.trim()+' ' : '';
+
+  recognition.onstart=()=>{
+    activeRecognition=recognition;
+    activeButton=button;
+    button.classList.add('recording');
+    button.textContent='⏹ Parar';
+    status.textContent='Ouvindo... fale naturalmente.';
+  };
+  recognition.onresult=(event)=>{
+    let interim='';
+    for(let i=event.resultIndex;i<event.results.length;i++){
+      const t=event.results[i][0].transcript;
+      if(event.results[i].isFinal) finalText+=t+' ';
+      else interim+=t;
+    }
+    textarea.value=(finalText+interim).trim();
+    textarea.dispatchEvent(new Event('input',{bubbles:true}));
+  };
+  recognition.onerror=(event)=>{
+    status.textContent=event.error==='not-allowed'
+      ? 'Permissão do microfone não concedida.'
+      : 'Não foi possível continuar. Você pode tentar novamente.';
+  };
+  recognition.onend=()=>{
+    if(activeRecognition===recognition){
+      activeRecognition=null;
+      activeButton=null;
+      button.classList.remove('recording');
+      button.textContent='🎙️ Falar';
+      if(!status.textContent || status.textContent==='Ouvindo... fale naturalmente.')
+        status.textContent='Transcrição concluída. Você pode editar o texto.';
+    }
+  };
+  recognition.start();
+}
+
+</script>
+</body>
+</html>
