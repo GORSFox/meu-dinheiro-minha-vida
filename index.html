@@ -243,6 +243,65 @@ button.primary,.btn{min-height:48px}
   .row-actions{gap:8px}
 }
 @media(max-width:560px){.btns .btn{flex:1 1 100%}}
+
+.btn-pdf {
+    background: #8b3f4a;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    min-height: 48px;
+}
+.btn-pdf:hover { opacity: 0.9; }
+
+@media print {
+
+    /* Esconde elementos que não devem aparecer no PDF */
+    nav,
+    button,
+    .no-print,
+    .voice-wrap,
+    .menu-lateral,
+    .scrim {
+        display: none !important;
+    }
+
+    body {
+        background: #fff !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container,
+    .content,
+    main {
+        width: 100% !important;
+        max-width: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Mantém as cores e imagens na impressão */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Evita cortes ruins entre blocos */
+    .card,
+    section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+}
 </style>
 </head>
 <body>
@@ -626,7 +685,9 @@ button.primary,.btn{min-height:48px}
 </div>
 <div class="btns">
 <button class="primary btn" onclick="saveData()">Salvar neste dispositivo</button>
-<button class="secondary btn" onclick="window.print()">Imprimir / salvar em PDF</button>
+<button type="button" onclick="salvarMinhaJornadaPDF()" class="btn-pdf">
+    📄 Salvar minha jornada em PDF
+</button>
 <button class="danger btn" onclick="clearData()">Limpar diagnóstico</button>
 </div>
 <div class="progress"><div class="bar" id="bar"></div></div>
@@ -970,6 +1031,14 @@ sc.addEventListener('click',()=>set(false));
 document.querySelectorAll('.navin button').forEach(b=>b.addEventListener('click',()=>set(false)));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});
 matchMedia('(min-width:1001px)').addEventListener('change',e=>{if(e.matches)set(false)});})();
+</script>
+<script>
+function salvarMinhaJornadaPDF() {
+    const t = document.title;
+    document.title = 'Minha jornada financeira';
+    window.addEventListener('afterprint', () => { document.title = t; }, { once: true });
+    window.print();
+}
 </script>
 </body>
 </html>
